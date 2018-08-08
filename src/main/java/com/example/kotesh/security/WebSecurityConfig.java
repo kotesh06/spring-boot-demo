@@ -6,6 +6,7 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
@@ -15,6 +16,8 @@ import com.example.kotesh.security.jwt.JWTLoginFilter;
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
+	
+	
 
 	 @Override
 	    protected void configure(HttpSecurity http) throws Exception {
@@ -36,10 +39,15 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 	    @Override
 	    protected void configure(AuthenticationManagerBuilder auth) throws Exception{
 	        // Create a default account
-	        auth.inMemoryAuthentication().passwordEncoder(NoOpPasswordEncoder.getInstance())  
+	        auth.inMemoryAuthentication().passwordEncoder(new BCryptPasswordEncoder())  
 	                .withUser("admin")
-	                .password("password")
+	                .password("$2a$10$v7oyNAglQmw3fho54x0koeMrfDkU6TtTSyUuao043.DNp0BMCPdi6")
 	                .roles("ADMIN");
 	    }
 
+	    public static void main(String[] args) {
+			
+	    	String encodedPwd = new BCryptPasswordEncoder().encode("password");
+	    	System.out.println(encodedPwd);
+		}
 }
